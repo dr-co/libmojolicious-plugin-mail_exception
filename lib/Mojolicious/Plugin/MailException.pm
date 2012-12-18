@@ -1,6 +1,6 @@
 =head1 NAME
 
-Mojolicious::Plugin::MailException - Mojolicious plugin to send crashinformation by email
+Mojolicious::Plugin::MailException - Mojolicious plugin to send crash information by email
 
 =head1 SYNOPSIS
 
@@ -61,6 +61,10 @@ Subroutine that is used to send the mail, example:
         });
     }
 
+In the function You can send email by yoursef and (or) prepare and
+send Your own mail (sms, etc) message using B<$exception> object.
+See L<Mojo::Exception>.
+
 =back
 
 =head2 COPYRIGHT AND LICENCE
@@ -72,12 +76,11 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
-
 =cut
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 use 5.008008;
 use strict;
 use warnings;
@@ -87,7 +90,6 @@ use Data::Dumper;
 use Mojo::Exception;
 use Carp;
 use MIME::Lite;
-# use MIME::Base64;
 use MIME::Words ':all';
 
 
@@ -158,23 +160,16 @@ my $mail_prepare = sub {
 };
 
 
-my $send_cb = sub {
-    my ($mail, $e) = @_;
-    $mail->send;
-};
-
 sub register {
     my ($self, $app, $conf) = @_;
 
-    my $cb = $conf->{send} || $send_cb;
+    my $cb = $conf->{send} || sub { $_[0]->send };
     croak "Usage: app->plugin('ExceptionMail'[, send => sub { ... })'"
         unless 'CODE' eq ref $cb;
 
     my $headers = $conf->{headers} || {};
     my $from = $conf->{from} || 'root@localhost';
     my $to   = $conf->{to} || 'webmaster@localhost';
-
-
 
     croak "headers must be a HASHREF" unless 'HASH' eq ref $headers;
 
