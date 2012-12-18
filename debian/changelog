@@ -3,7 +3,7 @@ libmojolicious-plugin-mailexception-perl (0.02-1) unstable; urgency=low
   * New release
     * drop Changes, uses debian/changelog instead,
     * update documentation
-  * Upload module to debian, closes: 1234
+  * Upload module to debian, closes: 696226
 
  -- Dmitry E. Oboukhov <unera@debian.org>  Tue, 18 Dec 2012 15:30:02 +0400
 
