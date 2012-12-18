@@ -1,4 +1,4 @@
-package Mojolicious::Plugin::ExceptionMail;
+package Mojolicious::Plugin::MailException;
 
 our $VERSION = '0.01';
 use 5.008008;

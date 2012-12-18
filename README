@@ -1,5 +1,5 @@
-Mojolicious-Plugin-ExceptionMail version 0.01
-=============================================
+Mojolicious-Plugin-MailException
+================================
 
 The README is used to introduce the module and provide instructions on
 how to install the module, any machine dependencies it may have (for
@@ -23,18 +23,17 @@ To install this module type the following:
 
 DEPENDENCIES
 
-This module requires these other modules and libraries:
-
-  blah blah blah
+The module is plugin for Mojolicious to send crash information to
+email.
 
 COPYRIGHT AND LICENCE
 
-Put the correct copyright and licence information here.
 
 Copyright (C) 2012 by Dmitry E. Oboukhov
+    2012 by Roman V. Nikolaev
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.14.2 or,
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
 at your option, any later version of Perl 5 you may have available.
 
 

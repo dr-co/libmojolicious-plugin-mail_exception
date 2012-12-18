@@ -8,7 +8,7 @@ use lib qw(lib ../lib);
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Test::More tests    => 17;
+use Test::More tests    => 19;
 use Encode qw(decode encode);
 
 my @elist;
@@ -24,7 +24,9 @@ BEGIN {
 
     use_ok 'Test::Mojo';
     require_ok 'Mojolicious';
-    require_ok 'Mojolicious::Plugin::ExceptionMail';
+    require_ok 'MIME::Lite';
+    require_ok 'MIME::Words';
+    require_ok 'Mojolicious::Plugin::MailException';
 }
 
 
@@ -79,7 +81,7 @@ use Mojo::Base 'Mojolicious';
 sub startup {
     my ($self) = @_;
 
-    $self->plugin('ExceptionMail',
+    $self->plugin('MailException',
         send => sub {
             my ($m, $e) = @_;
             push @elist => $e;
