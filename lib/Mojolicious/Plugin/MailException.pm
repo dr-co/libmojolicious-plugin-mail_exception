@@ -47,7 +47,7 @@ Hash with headers that have to be added to mail
 
 =item send
 
-Subroutine that is used to send the mail, example:
+Subroutine that can be used to send the mail, example:
 
     sub startup {
         my ($self) = @_;
@@ -67,7 +67,7 @@ See L<Mojo::Exception>.
 
 =back
 
-=head2 COPYRIGHT AND LICENCE
+=head1 COPYRIGHT AND LICENCE
 
  Copyright (C) 2012 by Dmitry E. Oboukhov <unera@debian.org>
  Copyright (C) 2012 by Roman V. Nikolaev <rshadow@rambler.ru>
