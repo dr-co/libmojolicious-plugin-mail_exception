@@ -1,0 +1,9 @@
+MYMETA.yml
+Makefile
+blib/*
+debian/files
+debian/libmojolicious-plugin-mailexception-perl.debhelper.log
+debian/libmojolicious-plugin-mailexception-perl.substvars
+debian/libmojolicious-plugin-mailexception-perl/
+pm_to_blib
+Mojolicious-Plugin-MailException-*.tar.gz
