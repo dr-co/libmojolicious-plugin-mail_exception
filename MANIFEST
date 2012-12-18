@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/010-tplugun.t
+lib/Mojolicious/Plugin/MailException.pm
