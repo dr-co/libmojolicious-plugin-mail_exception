@@ -1,0 +1,18 @@
+#!/usr/bin/make -f
+
+PKG := $(shell dpkg-parsechangelog|grep ^Source|awk '{print $$2}')
+MOD := $(shell cat Makefile.PL|grep VERSION_FROM \
+    |sed 's/[[:space:]]\+//g'|sed 's/.*lib/lib/'|sed 's/\.pm.*$$/.pm/')
+MV := $(shell perl -le \
+    "`grep VERSION $(MOD)`; print \$$VERSION")
+DV := $(shell dpkg-parsechangelog |grep ^Version \
+    |awk '{print $$2}'|sed 's/-[[:digit:]]\+$$//')
+
+tarball: clean
+	test "$(MOD) v$(MV)" = "$(MOD) v$(DV)"
+	cd .. && \
+	tar --exclude=debian --exclude=.git -czvf \
+	$(PKG)_$(MV).orig.tar.gz \
+	$(PKG)-$(MV)
+%:
+	dh $@

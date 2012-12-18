@@ -1,3 +1,80 @@
+=head1 NAME
+
+Mojolicious::Plugin::MailException - Mojolicious plugin to send crashinformation by email
+
+=head1 SYNOPSIS
+
+    package MyServer;
+    use Mojo::Base 'Mojolicious';
+
+    sub startup {
+        my ($self) = @_;
+
+        $self->plugin(MailException => {
+            from    => 'robot@my.site.com',
+            to      => 'mail1@my.domain.com, mail2@his.domain.com',
+            sublect => 'My site crashed!',
+            headers => {
+                'X-MySite' => 'crashed'
+            }
+        });
+    }
+
+=head1 DESCRIPTION
+
+The plugin catches all exceptions, packs them into email and sends
+them to email.
+
+There are some plugin options:
+
+=over
+
+=item from
+
+From-address for email (default B<root@localhost>)
+
+=item to
+
+To-address(es) for email (defailt B<webmaster@localhost>)
+
+=item subject
+
+Subject for crash email
+
+=item headers
+
+Hash with headers that have to be added to mail
+
+=item send
+
+Subroutine that is used to send the mail, example:
+
+    sub startup {
+        my ($self) = @_;
+
+        $self->plugin(MailException => {
+            send => sub {
+                my ($mail, $exception) = @_;
+
+                $mail->send;    # prepared MIME::Lite object
+            }
+        });
+    }
+
+=back
+
+=head2 COPYRIGHT AND LICENCE
+
+ Copyright (C) 2012 by Dmitry E. Oboukhov <unera@debian.org>
+ Copyright (C) 2012 by Roman V. Nikolaev <rshadow@rambler.ru>
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+
+=cut
+
 package Mojolicious::Plugin::MailException;
 
 our $VERSION = '0.01';
@@ -127,6 +204,5 @@ sub register {
         $next->()
     });
 }
-
 
 1;
