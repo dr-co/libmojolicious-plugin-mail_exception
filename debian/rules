@@ -10,6 +10,7 @@ DV := $(shell dpkg-parsechangelog |grep ^Version \
 
 tarball: clean
 	test "$(MOD) v$(MV)" = "$(MOD) v$(DV)"
+	test -d ../$(PKG)-$(MV)
 	cd .. && \
 	tar --exclude=debian --exclude=.git -czvf \
 	$(PKG)_$(MV).orig.tar.gz \
