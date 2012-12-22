@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.03-2) nowtaxi; urgency=low
+
+  * New release (lines_after can be absent).
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Sat, 22 Dec 2012 19:04:28 +0400
+
 libmojolicious-plugin-mailexception-perl (0.02-1) unstable; urgency=low
 
   * New release
