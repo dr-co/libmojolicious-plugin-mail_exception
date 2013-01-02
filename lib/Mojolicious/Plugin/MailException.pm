@@ -80,7 +80,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 use 5.008008;
 use strict;
 use warnings;
@@ -180,9 +180,10 @@ sub register {
         local $SIG{__DIE__} = sub {
             my ($e) = @_;
             my @caller = caller;
-            $e = Mojo::Exception->new($e, @caller[1, 2]) unless ref $e;
+            $e = Mojo::Exception->new(
+                sprintf '%s at %s line %d', $e, @caller[1,2]) unless ref $e;
             my @frames;
-            for (my $i = 1; caller($i); $i++) {
+            for (my $i = 0; caller($i); $i++) {
                 push @frames => [ caller $i ];
             }
             $e->frames(\@frames);
