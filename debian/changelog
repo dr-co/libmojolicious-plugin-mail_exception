@@ -1,3 +1,10 @@
+libmojolicious-plugin-mailexception-perl (0.05-1) nowtaxi; urgency=low
+
+  * New release (if Mojo has already prepared exception object the plugin
+    wont update the exception).
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Fri, 04 Jan 2013 15:46:25 +0400
+
 libmojolicious-plugin-mailexception-perl (0.04-1) nowtaxi; urgency=low
 
   * New release (uses Mojo::Exception->new properly).
