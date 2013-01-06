@@ -12,4 +12,11 @@ WriteMakefile(
       (ABSTRACT_FROM  => 'lib/Mojolicious/Plugin/MailException.pm',
        AUTHOR         => 'Dmitry E. Oboukhov <unera@debian.org>') : ()),
        LICENSE        => 'Perl',
+
+       META_MERGE => {
+            resources => {
+                homepage => 'https://github.com/dr-co/libmojolicious-plugin-mail_exception',
+                bugtracker => 'https://github.com/dr-co/libmojolicious-plugin-mail_exception/issues',
+            }
+       }
 );

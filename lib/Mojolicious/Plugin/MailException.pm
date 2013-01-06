@@ -67,6 +67,11 @@ See L<Mojo::Exception>.
 
 =back
 
+=head1 VCS
+
+The plugin is placed on
+L<github|https://github.com/dr-co/libmojolicious-plugin-mail_exception>.
+
 =head1 COPYRIGHT AND LICENCE
 
  Copyright (C) 2012 by Dmitry E. Oboukhov <unera@debian.org>
@@ -80,7 +85,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 use 5.008008;
 use strict;
 use warnings;
