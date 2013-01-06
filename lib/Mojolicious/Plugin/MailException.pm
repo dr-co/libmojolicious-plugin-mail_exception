@@ -113,7 +113,7 @@ my $mail_prepare = sub {
     my $maxl = eval { length $e->lines_after->[-1][0]; };
     $maxl ||= 5;
     $text .= sprintf "   %*d %s\n", $maxl, @{$_}[0,1] for @{ $e->lines_before };
-    $text .= sprintf " * %*d %s\n", $maxl, @{ $e->line }[0,1];
+    $text .= sprintf " * %*d %s\n", $maxl, @{ $e->line }[0,1] if $e->line->[0];
     $text .= sprintf "   %*d %s\n", $maxl, @{$_}[0,1] for @{ $e->lines_after };
 
     if (@{ $e->frames }) {

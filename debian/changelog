@@ -1,3 +1,10 @@
+libmojolicious-plugin-mailexception-perl (0.07-1) nowtaxi; urgency=low
+
+  * Fix 'uninitialized value' warning, thanks to Renée Bäcker
+   for bugreport https://rt.cpan.org/Ticket/Display.html?id=82528. 
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Mon, 07 Jan 2013 02:46:08 +0400
+
 libmojolicious-plugin-mailexception-perl (0.06-1) nowtaxi; urgency=low
 
   * The module can really use perl 5.8.8, thanks to Renée Bäcker
