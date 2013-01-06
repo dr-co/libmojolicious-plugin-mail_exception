@@ -1,3 +1,10 @@
+libmojolicious-plugin-mailexception-perl (0.06-1) nowtaxi; urgency=low
+
+  * The module can really use perl 5.8.8, thanks to Renée Bäcker
+    for bugreport https://rt.cpan.org/Ticket/Display.html?id=82527.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Mon, 07 Jan 2013 01:51:50 +0400
+
 libmojolicious-plugin-mailexception-perl (0.05-1) nowtaxi; urgency=low
 
   * New release (if Mojo has already prepared exception object the plugin

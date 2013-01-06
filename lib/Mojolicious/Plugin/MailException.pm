@@ -80,7 +80,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 use 5.008008;
 use strict;
 use warnings;
