@@ -61,7 +61,7 @@ Subroutine that can be used to send the mail, example:
         });
     }
 
-In the function You can send email by yoursef and (or) prepare and
+In the function You can send email by yourself and (or) prepare and
 send Your own mail (sms, etc) message using B<$exception> object.
 See L<Mojo::Exception>.
 
