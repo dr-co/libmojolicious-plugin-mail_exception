@@ -13,7 +13,7 @@ Mojolicious::Plugin::MailException - Mojolicious plugin to send crash informatio
         $self->plugin(MailException => {
             from    => 'robot@my.site.com',
             to      => 'mail1@my.domain.com, mail2@his.domain.com',
-            sublect => 'My site crashed!',
+            subject => 'My site crashed!',
             headers => {
                 'X-MySite' => 'crashed'
             }
