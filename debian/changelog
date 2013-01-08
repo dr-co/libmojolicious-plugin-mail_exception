@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.09-1) nowtaxi; urgency=low
+
+  * Some perldoc fixes.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Tue, 08 Jan 2013 16:54:39 +0400
+
 libmojolicious-plugin-mailexception-perl (0.08-1) nowtaxi; urgency=low
 
   * Add information about vcs/homepage into Makefile.PL.
