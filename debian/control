@@ -6,8 +6,7 @@ Build-Depends: debhelper (>= 8)
 Build-Depends-Indep: libmime-lite-perl,
  libmime-tools-perl,
  libmojolicious-perl,
- perl,
- perl-modules
+ perl
 Standards-Version: 3.9.3
 Homepage: http://search.cpan.org/dist/Mojolicious-Plugin-MailException/
 
