@@ -85,7 +85,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 use 5.008008;
 use strict;
 use warnings;
@@ -110,7 +110,7 @@ my $mail_prepare = sub {
     my $text = '';
     $text .= "Exception\n";
     $text .= "~~~~~~~~~\n";
-    
+
 
     $text .= $e->message;
     $text .= "\n";
@@ -146,7 +146,7 @@ my $mail_prepare = sub {
         Type    => 'text/plain; charset=utf-8',
         Data    => $text
     );
-    
+
     $text  = "Request\n";
     $text .= "~~~~~~~\n";
     my $req = $self->req->to_string;
@@ -185,11 +185,11 @@ sub register {
         local $SIG{__DIE__} = sub {
             my ($e) = @_;
 
-            unless (ref $e) {
+            unless (ref $e and $e->isa('Mojo::Exception')) {
                 my @caller = caller;
 
                 $e = Mojo::Exception->new(
-                    sprintf '%s at %s line %d', $e, @caller[1,2]);
+                    sprintf '%s at %s line %d', "$e", @caller[1,2]);
                 my @frames;
                 for (my $i = 0; caller($i); $i++) {
                     push @frames => [ caller $i ];

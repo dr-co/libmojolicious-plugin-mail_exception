@@ -7,3 +7,4 @@ debian/libmojolicious-plugin-mailexception-perl.substvars
 debian/libmojolicious-plugin-mailexception-perl/
 pm_to_blib
 Mojolicious-Plugin-MailException-*.tar.gz
+.project
