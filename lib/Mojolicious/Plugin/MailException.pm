@@ -85,7 +85,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 use 5.008008;
 use strict;
 use warnings;
@@ -183,6 +183,8 @@ sub register {
 
 
         local $SIG{__DIE__} = sub {
+            return if caller eq 'eval';
+
             my ($e) = @_;
 
             unless (ref $e and $e->isa('Mojo::Exception')) {
