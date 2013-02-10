@@ -15,5 +15,9 @@ tarball: clean
 	tar --exclude=debian --exclude=.git -czvf \
 	$(PKG)_$(MV).orig.tar.gz \
 	$(PKG)-$(MV)
+
+override_dh_clean:
+	dh_clean
+	rm -f Mojolicious-Plugin-MailException-*.tar.gz
 %:
 	dh $@
