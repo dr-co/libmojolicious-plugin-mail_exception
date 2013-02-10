@@ -1,3 +1,10 @@
+libmojolicious-plugin-mailexception-perl (0.11-2) unstable; urgency=low
+
+  * Add Roman V. Nikolaev to uploaders list.
+  * Upload last fixes into Debian.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Sun, 10 Feb 2013 22:36:04 +0400
+
 libmojolicious-plugin-mailexception-perl (0.11-1) nowtaxi; urgency=low
 
   * Don`t catch eval exception.
