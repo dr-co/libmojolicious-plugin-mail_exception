@@ -85,7 +85,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 use 5.008008;
 use strict;
 use warnings;
@@ -181,9 +181,7 @@ sub register {
     $app->hook(around_dispatch => sub {
         my ($next, $c) = @_;
 
-
         local $SIG{__DIE__} = sub {
-            return if caller eq 'eval';
 
             my ($e) = @_;
 
@@ -202,11 +200,12 @@ sub register {
             my $mail = $mail_prepare->( $e, $conf, $c, $from, $to, $headers );
 
             eval {
+                local $SIG{__DIE__};
                 $cb->($mail, $e);
                 1;
             } or warn $@;
 
-            die $e;
+            die $_[0];
         };
         $next->()
     });

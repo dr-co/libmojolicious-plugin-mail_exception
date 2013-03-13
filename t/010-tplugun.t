@@ -43,7 +43,6 @@ $t  -> get_ok('/crash')
     -> content_like(qr{<pre>превед, медвед})
 ;
 
-
 is  scalar @elist, 1, 'one caugth exception';
 my $e = shift @elist;
 like $e->message, qr{превед, медвед}, 'text of message';

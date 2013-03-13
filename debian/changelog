@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.12-1) unstable; urgency=low
+
+  * $SIG{__DIE__} doesn't modify original exception.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Thu, 14 Mar 2013 02:47:37 +0400
+
 libmojolicious-plugin-mailexception-perl (0.11-2) unstable; urgency=low
 
   * Add Roman V. Nikolaev to uploaders list.
