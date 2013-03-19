@@ -21,3 +21,6 @@ override_dh_clean:
 	rm -f Mojolicious-Plugin-MailException-*.tar.gz
 %:
 	dh $@
+
+override_dh_installchangelogs:
+	dh_installchangelogs -XChanges
