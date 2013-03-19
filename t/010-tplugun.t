@@ -8,8 +8,8 @@ use lib qw(lib ../lib);
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Test::More tests    => 19;
-use Encode qw(decode encode);
+use Test::More tests    => 20;
+use Encode qw(decode encode decode_utf8);
 
 my @elist;
 my @mails;
@@ -41,15 +41,38 @@ $t  -> get_ok('/crash')
     -> status_is(500)
     -> element_exists('div#showcase > pre')
     -> content_like(qr{<pre>превед, медвед})
+    -> content_like(qr{
+        <tr[^>]+class="important"[^>]*>
+        \s*
+        <td.*?/td>
+        \s*
+        <td[^>]+class="value"[^>]*>
+        \s*
+        <pre[^>]+class="prettyprint"[^>]*>
+        \s*
+        [^>]*
+        die\s+marker
+    }x
+    )
 ;
+
+
 
 is  scalar @elist, 1, 'one caugth exception';
 my $e = shift @elist;
+
+
+
 like $e->message, qr{превед, медвед}, 'text of message';
 like $e->line->[1], qr{die "превед, медвед"}, 'line';
 
 is scalar @mails, 1, 'one prepared mail';
 my $m = shift @mails;
+
+
+# note decode_utf8 $t->tx->res->to_string;
+# note decode_utf8 $m->as_string;
+
 
 $m->send if $ENV{SEND};
 isa_ok $m => 'MIME::Lite';
@@ -66,7 +89,10 @@ sub hello {
 }
 
 sub crash {
-    die "превед, медвед";
+    eval {
+        die "медвед, превед";
+    };
+    die "превед, медвед"; ### die marker
 }
 
 package MpemTest;
@@ -79,6 +105,9 @@ use Mojo::Base 'Mojolicious';
 
 sub startup {
     my ($self) = @_;
+
+    $self->secret('my secret phrase');
+    $self->mode('development');
 
     $self->plugin('MailException',
         send => sub {

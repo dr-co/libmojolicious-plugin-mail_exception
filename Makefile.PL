@@ -20,3 +20,6 @@ WriteMakefile(
             }
        }
 );
+
+open my $fh, '>>', 'Makefile' or exit 0;
+print $fh "\n\nTEST_VERBOSE=1\n\n";

@@ -85,7 +85,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.12';
+our $VERSION = '0.14';
 use 5.008008;
 use strict;
 use warnings;
@@ -181,33 +181,54 @@ sub register {
     $app->hook(around_dispatch => sub {
         my ($next, $c) = @_;
 
-        local $SIG{__DIE__} = sub {
+        my $e;
+        my @res;
+        {
+            local $SIG{__DIE__} = sub {
 
-            my ($e) = @_;
+                ($e) = @_;
 
-            unless (ref $e and $e->isa('Mojo::Exception')) {
-                my @caller = caller;
+                unless (ref $e and $e->isa('Mojo::Exception')) {
+                    my @caller = caller;
 
-                $e = Mojo::Exception->new(
-                    sprintf '%s at %s line %d', "$e", @caller[1,2]);
-                my @frames;
-                for (my $i = 0; caller($i); $i++) {
-                    push @frames => [ caller $i ];
+                    $e = Mojo::Exception->new(
+                        sprintf '%s at %s line %d', "$e", @caller[1,2]);
+                    my @frames;
+                    for (my $i = 0; caller($i); $i++) {
+                        push @frames => [ caller $i ];
+                    }
+                    $e->frames(\@frames);
                 }
-                $e->frames(\@frames);
+
+
+                die $_[0];
+            };
+
+            if (wantarray) {
+                @res = eval { $next->() };
+            } elsif (defined wantarray) {
+                $res[0] = eval { $next->() };
+            } else {
+                eval { $next->() };
             }
+        }
 
-            my $mail = $mail_prepare->( $e, $conf, $c, $from, $to, $headers );
+        unless($@) {
+            return @res     if          wantarray;
+            return $res[0]  if  defined wantarray;
+            return;
+        }
 
-            eval {
-                local $SIG{__DIE__};
-                $cb->($mail, $e);
-                1;
-            } or warn $@;
+        my $mail = $mail_prepare->( $e, $conf, $c, $from, $to, $headers );
 
-            die $_[0];
-        };
-        $next->()
+        eval {
+            local $SIG{__DIE__};
+            $cb->($mail, $e);
+            1;
+        } or warn $@;
+
+        # propagate Mojo::Exception
+        die $e;
     });
 }
 

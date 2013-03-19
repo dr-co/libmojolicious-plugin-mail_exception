@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.14-1) unstable; urgency=low
+
+  * Plugin doesn't catch transitional exceptions.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Tue, 19 Mar 2013 17:44:25 +0400
+
 libmojolicious-plugin-mailexception-perl (0.12-1) unstable; urgency=low
 
   * $SIG{__DIE__} doesn't modify original exception.
