@@ -85,7 +85,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 use 5.008008;
 use strict;
 use warnings;
@@ -130,6 +130,19 @@ my $mail_prepare = sub {
         }
     }
 
+
+    if (eval { $self->session; scalar keys %{ $self->session } }) {
+        local $Data::Dumper::Indent = 1;
+        local $Data::Dumper::Terse = 1;
+        local $Data::Dumper::Useqq = 1;
+        local $Data::Dumper::Deepcopy = 1;
+        local $Data::Dumper::Maxdepth = 0;
+
+        $text .= "\n";
+        $text .= "Session\n";
+        $text .= "~~~~~~~\n";
+        $text .= Dumper($self->session);
+    }
 
     eval { utf8::encode($text) if utf8::is_utf8 $text };
 
@@ -182,7 +195,6 @@ sub register {
         my ($next, $c) = @_;
 
         my $e;
-        my @res;
         {
             local $SIG{__DIE__} = sub {
 
@@ -201,27 +213,18 @@ sub register {
                 }
 
 
-                die $_[0];
+                CORE::die $_[0];
             };
 
-            if (wantarray) {
-                @res = eval { $next->() };
-            } elsif (defined wantarray) {
-                $res[0] = eval { $next->() };
-            } else {
-                eval { $next->() };
-            }
+            eval { $next->() };
         }
 
-        unless($@) {
-            return @res     if          wantarray;
-            return $res[0]  if  defined wantarray;
-            return;
-        }
+        return unless $@;
 
         my $mail = $mail_prepare->( $e, $conf, $c, $from, $to, $headers );
 
         eval {
+            local $SIG{CHLD} = 'IGNORE';
             local $SIG{__DIE__};
             $cb->($mail, $e);
             1;

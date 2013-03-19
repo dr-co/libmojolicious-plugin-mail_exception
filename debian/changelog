@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.15-1) unstable; urgency=low
+
+  * use CORE::die instead die (try to localize modperl's segfaults).
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Wed, 20 Mar 2013 02:30:07 +0400
+
 libmojolicious-plugin-mailexception-perl (0.14-1) unstable; urgency=low
 
   * Plugin doesn't catch transitional exceptions.

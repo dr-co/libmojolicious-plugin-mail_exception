@@ -73,7 +73,7 @@ my $m = shift @mails;
 # note decode_utf8 $t->tx->res->to_string;
 # note decode_utf8 $m->as_string;
 
-
+note decode_utf8 $m->as_string if $ENV{SHOW};
 $m->send if $ENV{SEND};
 isa_ok $m => 'MIME::Lite';
 $m = $m->as_string;
@@ -127,7 +127,6 @@ sub startup {
         $r  -> get('/crash')
             -> to('ctl#crash')
         ;
-
     }
 }
 
