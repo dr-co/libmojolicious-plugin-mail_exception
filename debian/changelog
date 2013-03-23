@@ -1,4 +1,4 @@
-libmojolicious-plugin-mailexception-perl (0.16-1) nowtaxi; urgency=low
+libmojolicious-plugin-mailexception-perl (0.16-1) unstable; urgency=low
 
   * Works properly if client's application redefines $SIG{__DIE__}, too.
 
