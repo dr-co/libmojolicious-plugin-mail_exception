@@ -8,7 +8,7 @@ use lib qw(lib ../lib);
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Test::More tests    => 20;
+use Test::More tests    => 26;
 use Encode qw(decode encode decode_utf8);
 
 my @elist;
@@ -51,7 +51,7 @@ $t  -> get_ok('/crash')
         <pre[^>]+class="prettyprint"[^>]*>
         \s*
         [^>]*
-        die\s+marker
+        die\s+marker1
     }x
     )
 ;
@@ -81,6 +81,32 @@ like $m, qr{^Stack}m, 'Stack';
 like $m, qr{^Content-Disposition:\s*inline}m, 'Content-Disposition';
 
 
+@mails = ();
+$t  -> get_ok('/crash_sig')
+    -> status_is(500)
+    -> element_exists('div#showcase > pre')
+    -> content_like(qr{<pre>медвед превед})
+    -> content_like(qr{
+        <tr[^>]+class="important"[^>]*>
+        \s*
+        <td.*?/td>
+        \s*
+        <td[^>]+class="value"[^>]*>
+        \s*
+        <pre[^>]+class="prettyprint"[^>]*>
+        \s*
+        [^>]*
+        die\s+marker2
+    }x
+    )
+;
+;
+is scalar @mails, 1, 'one prepared mail';
+$m = shift @mails;
+
+# note decode_utf8 $m->as_string;
+
+
 package MpemTest::Ctl;
 use Mojo::Base 'Mojolicious::Controller';
 
@@ -92,7 +118,14 @@ sub crash {
     eval {
         die "медвед, превед";
     };
-    die "превед, медвед"; ### die marker
+    die "превед, медвед"; ### die marker1
+}
+
+sub crash_sig {
+    local $SIG{__DIE__} = sub {
+        die $_[0];
+    };
+    die "медвед превед"; ### die marker2
 }
 
 package MpemTest;
@@ -126,6 +159,10 @@ sub startup {
 
         $r  -> get('/crash')
             -> to('ctl#crash')
+        ;
+        
+        $r  -> get('/crash_sig')
+            -> to('ctl#crash_sig')
         ;
     }
 }

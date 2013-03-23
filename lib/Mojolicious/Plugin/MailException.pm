@@ -85,7 +85,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 use 5.008008;
 use strict;
 use warnings;
@@ -220,6 +220,8 @@ sub register {
         }
 
         return unless $@;
+
+        $e = Mojo::Exception->new($@) unless $e;
 
         my $mail = $mail_prepare->( $e, $conf, $c, $from, $to, $headers );
 

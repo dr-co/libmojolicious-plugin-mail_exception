@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.16-1) nowtaxi; urgency=low
+
+  * Works properly if client's application redefines $SIG{__DIE__}, too.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Sun, 24 Mar 2013 00:24:49 +0400
+
 libmojolicious-plugin-mailexception-perl (0.15-1) unstable; urgency=low
 
   * use CORE::die instead die (try to localize modperl's segfaults).
