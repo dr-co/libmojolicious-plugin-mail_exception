@@ -111,7 +111,7 @@ package MpemTest::Ctl;
 use Mojo::Base 'Mojolicious::Controller';
 
 sub hello {
-     $_[0]->render_text('Hello');
+     $_[0]->render(text => 'Hello');
 }
 
 sub crash {
