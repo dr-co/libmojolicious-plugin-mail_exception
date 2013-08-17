@@ -1,6 +1,6 @@
 libmojolicious-plugin-mailexception-perl (0.17-1) unstable; urgency=low
 
-  * New release
+  * New release, closes: #713231
    - New Mojo uses render(text => $text) instead reder_text($text).
 
  -- Dmitry E. Oboukhov <unera@debian.org>  Sat, 17 Aug 2013 12:09:17 +0400
