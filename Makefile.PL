@@ -16,6 +16,7 @@ WriteMakefile(
        META_MERGE => {
             resources => {
                 homepage => 'https://github.com/dr-co/libmojolicious-plugin-mail_exception',
+                repository => 'https://github.com/dr-co/libmojolicious-plugin-mail_exception',
                 bugtracker => 'https://github.com/dr-co/libmojolicious-plugin-mail_exception/issues',
             }
        }
