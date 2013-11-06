@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.18-1) unstable; urgency=low
+
+  * User can add different tags for exceptions.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Wed, 06 Nov 2013 11:29:05 +0400
+
 libmojolicious-plugin-mailexception-perl (0.17-1) unstable; urgency=low
 
   * New release, closes: #713231

@@ -8,7 +8,7 @@ use lib qw(lib ../lib);
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Test::More tests    => 26;
+use Test::More tests    => 33;
 use Encode qw(decode encode decode_utf8);
 
 my @elist;
@@ -106,6 +106,30 @@ $m = shift @mails;
 
 # note decode_utf8 $m->as_string;
 
+@mails = ();
+$t  -> get_ok('/crash_sub')
+    -> status_is(500)
+    -> element_exists('div#showcase > pre')
+    -> content_like(qr{<pre>immediate})
+    -> content_like(qr{
+        <tr[^>]+class="important"[^>]*>
+        \s*
+        <td.*?/td>
+        \s*
+        <td[^>]+class="value"[^>]*>
+        \s*
+        <pre[^>]+class="prettyprint"[^>]*>
+        \s*
+        [^>]*
+        die\s+marker3
+    }x
+    )
+;
+;
+is scalar @mails, 1, 'one prepared mail';
+$m = shift @mails;
+
+like $m->header_as_string, qr{^X-Test:\s*123$}m, 'Additional header';
 
 package MpemTest::Ctl;
 use Mojo::Base 'Mojolicious::Controller';
@@ -126,6 +150,10 @@ sub crash_sig {
         die $_[0];
     };
     die "медвед превед"; ### die marker2
+}
+
+sub crash_sub {
+    $_[0]->mail_exception('immediate', { 'x-test' => 123 });  ### die marker3
 }
 
 package MpemTest;
@@ -163,6 +191,10 @@ sub startup {
         
         $r  -> get('/crash_sig')
             -> to('ctl#crash_sig')
+        ;
+
+        $r  -> get('/crash_sub')
+            -> to('ctl#crash_sub')
         ;
     }
 }

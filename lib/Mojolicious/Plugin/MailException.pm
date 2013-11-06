@@ -67,6 +67,12 @@ See L<Mojo::Exception>.
 
 =back
 
+The plugin provides additional method (helper) B<mail_exception>.
+
+    $cx->mail_exception('my_error', { 'X-Add-Header' => 'value' });
+
+You can use the helper to raise exception with additional mailheaders.
+
 =head1 VCS
 
 The plugin is placed on
@@ -85,7 +91,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 use 5.008008;
 use strict;
 use warnings;
@@ -223,7 +229,12 @@ sub register {
 
         $e = Mojo::Exception->new($@) unless $e;
 
-        my $mail = $mail_prepare->( $e, $conf, $c, $from, $to, $headers );
+        my $hdrs = $headers;
+
+        $hdrs = { %$hdrs, %{ $e->{local_headers} } }
+            if ref $e->{local_headers};
+
+        my $mail = $mail_prepare->( $e, $conf, $c, $from, $to, $hdrs );
 
         eval {
             local $SIG{CHLD} = 'IGNORE';
@@ -234,6 +245,23 @@ sub register {
 
         # propagate Mojo::Exception
         die $e;
+    });
+
+    $app->helper(mail_exception => sub {
+        my ($self, $et, $hdrs) = @_;
+        my @caller = caller 1;
+        $et ||= 'exception';
+        my $e = Mojo::Exception->new(
+            sprintf '%s at %s line %d', $et, @caller[1,2]
+        );
+        my @frames;
+        for (my $i = 1; caller($i); $i++) {
+            push @frames => [ caller $i ];
+        }
+        $e->frames(\@frames);
+
+        $e->{local_headers} = $hdrs;
+        CORE::die $e;
     });
 }
 
