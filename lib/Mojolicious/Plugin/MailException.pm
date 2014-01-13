@@ -35,7 +35,7 @@ From-address for email (default B<root@localhost>)
 
 =item to
 
-To-address(es) for email (defailt B<webmaster@localhost>)
+To-address(es) for email (default B<webmaster@localhost>)
 
 =item subject
 
@@ -71,7 +71,7 @@ The plugin provides additional method (helper) B<mail_exception>.
 
     $cx->mail_exception('my_error', { 'X-Add-Header' => 'value' });
 
-You can use the helper to raise exception with additional mailheaders.
+You can use the helper to raise exception with additional mail headers.
 
 =head1 VCS
 
