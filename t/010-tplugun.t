@@ -31,21 +31,19 @@ BEGIN {
 
 
 my $t = Test::Mojo->new('MpemTest');
-$t  -> get_ok('/')
-    -> status_is(200)
-    -> content_is('Hello')
-;
 
+$t->get_ok('/')
+  ->status_is(200)
+  ->content_is('Hello');
 
-$t  -> get_ok('/crash')
-    -> status_is(500)
-    -> content_like(qr{die marker1 outside eval});
+$t->get_ok('/crash')
+  ->status_is(500)
+  ->content_like(qr{die marker1 outside eval});
 
 
 
 is  scalar @elist, 1, 'one caugth exception';
 my $e = shift @elist;
-
 
 
 like $e->message, qr{^die marker1 outside eval}, 'text of message';
@@ -59,17 +57,20 @@ my $m = shift @mails;
 # note decode_utf8 $m->as_string;
 
 note decode_utf8 $m->as_string if $ENV{SHOW};
+
 $m->send if $ENV{SEND};
+
 isa_ok $m => 'MIME::Lite';
+
 $m = $m->as_string;
+
 like $m, qr{^Stack}m, 'Stack';
 like $m, qr{^Content-Disposition:\s*inline}m, 'Content-Disposition';
 
-
 @mails = ();
-$t  -> get_ok('/crash_sig')
-    -> status_is(500)
-    -> content_like(qr{^die marker2 sig});
+$t->get_ok('/crash_sig')
+  ->status_is(500)
+  ->content_like(qr{^die marker2 sig});
 
 is scalar @mails, 1, 'one prepared mail';
 $m = shift @mails;
@@ -77,10 +78,10 @@ $m = shift @mails;
 # note decode_utf8 $m->as_string;
 
 @mails = ();
-$t  -> get_ok('/crash_sub')
-    -> status_is(500)
-    -> content_like(qr{^mail exception marker3});
-;
+$t->get_ok('/crash_sub')
+  ->status_is(500)
+  ->content_like(qr{^mail exception marker3});
+
 is scalar @mails, 1, 'one prepared mail';
 $m = shift @mails;
 
@@ -140,22 +141,13 @@ sub startup {
         subject => 'Случилось страшное (тест)!',
         headers => {},
     );
-    for my $r ($self->routes) {
-        $r  -> get('/')
-            -> to('ctl#hello');
 
-        $r  -> get('/crash')
-            -> to('ctl#crash')
-        ;
-        
-        $r  -> get('/crash_sig')
-            -> to('ctl#crash_sig')
-        ;
+    my $r = $self->routes;
 
-        $r  -> get('/crash_sub')
-            -> to('ctl#crash_sub')
-        ;
-    }
+    $r->get('/')->to('ctl#hello');
+    $r->get('/crash')->to('ctl#crash');
+    $r->get('/crash_sig')->to('ctl#crash_sig');
+    $r->get('/crash_sub')->to('ctl#crash_sub');
 }
 
 1;
