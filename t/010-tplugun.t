@@ -167,7 +167,7 @@ use Mojo::Base 'Mojolicious';
 sub startup {
     my ($self) = @_;
 
-    $self->secret('my secret phrase');
+    $self->secrets(['my secret phrase']);
     $self->mode('development');
 
     $self->plugin('MailException',
