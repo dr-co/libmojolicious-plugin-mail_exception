@@ -8,7 +8,7 @@ use lib qw(lib ../lib);
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Test::More tests    => 33;
+use Test::More tests    => 27;
 use Encode qw(decode encode decode_utf8);
 
 my @elist;
@@ -39,22 +39,7 @@ $t  -> get_ok('/')
 
 $t  -> get_ok('/crash')
     -> status_is(500)
-    -> element_exists('div#showcase > pre')
-    -> content_like(qr{<pre>превед, медвед})
-    -> content_like(qr{
-        <tr[^>]+class="important"[^>]*>
-        \s*
-        <td.*?/td>
-        \s*
-        <td[^>]+class="value"[^>]*>
-        \s*
-        <pre[^>]+class="prettyprint"[^>]*>
-        \s*
-        [^>]*
-        die\s+marker1
-    }x
-    )
-;
+    -> content_like(qr{die marker1 outside eval});
 
 
 
@@ -63,8 +48,8 @@ my $e = shift @elist;
 
 
 
-like $e->message, qr{превед, медвед}, 'text of message';
-like $e->line->[1], qr{die "превед, медвед"}, 'line';
+like $e->message, qr{^die marker1 outside eval}, 'text of message';
+like $e->line->[1], qr{die marker1 outside eval}, 'line';
 
 is scalar @mails, 1, 'one prepared mail';
 my $m = shift @mails;
@@ -84,23 +69,8 @@ like $m, qr{^Content-Disposition:\s*inline}m, 'Content-Disposition';
 @mails = ();
 $t  -> get_ok('/crash_sig')
     -> status_is(500)
-    -> element_exists('div#showcase > pre')
-    -> content_like(qr{<pre>медвед превед})
-    -> content_like(qr{
-        <tr[^>]+class="important"[^>]*>
-        \s*
-        <td.*?/td>
-        \s*
-        <td[^>]+class="value"[^>]*>
-        \s*
-        <pre[^>]+class="prettyprint"[^>]*>
-        \s*
-        [^>]*
-        die\s+marker2
-    }x
-    )
-;
-;
+    -> content_like(qr{^die marker2 sig});
+
 is scalar @mails, 1, 'one prepared mail';
 $m = shift @mails;
 
@@ -109,22 +79,7 @@ $m = shift @mails;
 @mails = ();
 $t  -> get_ok('/crash_sub')
     -> status_is(500)
-    -> element_exists('div#showcase > pre')
-    -> content_like(qr{<pre>immediate})
-    -> content_like(qr{
-        <tr[^>]+class="important"[^>]*>
-        \s*
-        <td.*?/td>
-        \s*
-        <td[^>]+class="value"[^>]*>
-        \s*
-        <pre[^>]+class="prettyprint"[^>]*>
-        \s*
-        [^>]*
-        die\s+marker3
-    }x
-    )
-;
+    -> content_like(qr{^mail exception marker3});
 ;
 is scalar @mails, 1, 'one prepared mail';
 $m = shift @mails;
@@ -140,20 +95,22 @@ sub hello {
 
 sub crash {
     eval {
-        die "медвед, превед";
+        die "die marker1 inside eval";
     };
-    die "превед, медвед"; ### die marker1
+
+    die "die marker1 outside eval"; ### die marker1
 }
 
 sub crash_sig {
     local $SIG{__DIE__} = sub {
         die $_[0];
     };
-    die "медвед превед"; ### die marker2
+
+    die "die marker2 sig"; ### die marker2
 }
 
 sub crash_sub {
-    $_[0]->mail_exception('immediate', { 'x-test' => 123 });  ### die marker3
+    $_[0]->mail_exception("mail exception marker3", { 'x-test' => 123 });  ### die marker3
 }
 
 package MpemTest;
@@ -169,6 +126,8 @@ sub startup {
 
     $self->secrets(['my secret phrase']);
     $self->mode('development');
+
+	push @{$self->renderer->classes}, 'MpemTest';
 
     $self->plugin('MailException',
         send => sub {
@@ -200,3 +159,9 @@ sub startup {
 }
 
 1;
+
+__DATA__
+
+@@ exception.html.ep
+%= $exception
+
