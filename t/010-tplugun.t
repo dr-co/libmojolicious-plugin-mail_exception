@@ -8,7 +8,7 @@ use lib qw(lib ../lib);
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Test::More tests    => 27;
+use Test::More tests    => 29;
 use Encode qw(decode encode decode_utf8);
 
 my @elist;
@@ -38,7 +38,8 @@ $t->get_ok('/')
 
 $t->get_ok('/crash')
   ->status_is(500)
-  ->content_like(qr{die marker1 outside eval});
+  ->content_like(qr{^Exception: die marker1 outside eval})
+  ->content_like(qr{Exception Line:     die "die marker1 outside eval"; ### die marker1\n$});
 
 
 
@@ -47,7 +48,7 @@ my $e = shift @elist;
 
 
 like $e->message, qr{^die marker1 outside eval}, 'text of message';
-like $e->line->[1], qr{die marker1 outside eval}, 'line';
+like $e->line->[1], qr{^    die "die marker1 outside eval"; ### die marker1$}, 'line';
 
 is scalar @mails, 1, 'one prepared mail';
 my $m = shift @mails;
@@ -70,7 +71,8 @@ like $m, qr{^Content-Disposition:\s*inline}m, 'Content-Disposition';
 @mails = ();
 $t->get_ok('/crash_sig')
   ->status_is(500)
-  ->content_like(qr{^die marker2 sig});
+  ->content_like(qr{^Exception: die marker2 sig})
+  ->content_like(qr{Exception Line:     die "die marker2 sig"; ### die marker2\n$});
 
 is scalar @mails, 1, 'one prepared mail';
 $m = shift @mails;
@@ -80,7 +82,9 @@ $m = shift @mails;
 @mails = ();
 $t->get_ok('/crash_sub')
   ->status_is(500)
-  ->content_like(qr{^mail exception marker3});
+  ->content_like(qr{^Exception: mail exception marker3});
+# couldn get thi to work:
+#  ->content_like(qr!Exception Line:    \$_[0]->mail_exception("mail exception marker3", { 'x-test' => 123 });  ### die marker3!);
 
 is scalar @mails, 1, 'one prepared mail';
 $m = shift @mails;
@@ -155,5 +159,5 @@ sub startup {
 __DATA__
 
 @@ exception.html.ep
-%= $exception
-
+Exception: <%== $exception %>
+Exception Line: <%== $exception->line->[1] %>
