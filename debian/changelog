@@ -1,3 +1,10 @@
+libmojolicious-plugin-mailexception-perl (0.19-1) unstable; urgency=medium
+
+  * Some fixes for Mojo v.5, closes: #765004
+    thanks to Stephan Jauernick <stephan@stejau.de>.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Fri, 17 Oct 2014 23:44:06 +0400
+
 libmojolicious-plugin-mailexception-perl (0.18-1) unstable; urgency=low
 
   * User can add different tags for exceptions.

@@ -33,7 +33,8 @@ BEGIN {
 my $t = Test::Mojo->new('MpemTest');
 
 # Workaround for newer Mojolicious Versions so the Namespace stays the same
-$t->app->route->namespaces(['MpemTest']);
+$t->app->routes->namespaces(['MpemTest'])
+    if $t->app->can('routes') and $t->app->routes->can('namespaces');
 
 $t->get_ok('/')
   ->status_is(200)
