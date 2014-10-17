@@ -32,6 +32,9 @@ BEGIN {
 
 my $t = Test::Mojo->new('MpemTest');
 
+# Workaround for newer Mojolicious Versions so the Namespace stays the same
+$t->app->route->namespaces(['MpemTest']);
+
 $t->get_ok('/')
   ->status_is(200)
   ->content_is('Hello');
