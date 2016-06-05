@@ -8,7 +8,7 @@ use lib qw(lib ../lib);
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Test::More tests    => 29;
+use Test::More tests    => 30;
 use Encode qw(decode encode decode_utf8);
 
 my @elist;
@@ -66,7 +66,6 @@ note decode_utf8 $m->as_string if $ENV{SHOW};
 $m->send if $ENV{SEND};
 
 isa_ok $m => 'MIME::Lite';
-
 $m = $m->as_string;
 
 like $m, qr{^Stack}m, 'Stack';
@@ -84,9 +83,12 @@ $m = shift @mails;
 # note decode_utf8 $m->as_string;
 
 @mails = ();
-$t->get_ok('/crash_sub')
-  ->status_is(500)
-  ->content_like(qr{^Exception: mail exception marker3});
+$t -> get_ok('/crash_sub')
+   -> status_is(500)
+   -> content_like(qr{^Exception: mail exception marker3})
+   -> content_like(qr{Exception Line:.*?mail_exception.".*?### die marker3\n$})
+;
+
 # couldn get thi to work:
 #  ->content_like(qr!Exception Line:    \$_[0]->mail_exception("mail exception marker3", { 'x-test' => 123 });  ### die marker3!);
 

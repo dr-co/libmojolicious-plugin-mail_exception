@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.20-1) unstable; urgency=medium
+
+  * Update for latest mojolicious, Debian FTBFS, closes: 825541.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Sun, 05 Jun 2016 13:33:41 +0300
+
 libmojolicious-plugin-mailexception-perl (0.19-1) unstable; urgency=medium
 
   * Some fixes for Mojo v.5, closes: #765004

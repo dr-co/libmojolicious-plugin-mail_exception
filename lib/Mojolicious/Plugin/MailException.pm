@@ -91,7 +91,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 use 5.008008;
 use strict;
 use warnings;
@@ -209,17 +209,17 @@ sub register {
                 unless (ref $e and $e->isa('Mojo::Exception')) {
                     my @caller = caller;
 
+                    $e =~ s/at\s+(.+?)\s+line\s+(\d+).*//s;
+
                     $e = Mojo::Exception->new(
-                        sprintf '%s at %s line %d', "$e", @caller[1,2]);
-                    my @frames;
-                    for (my $i = 0; caller($i); $i++) {
-                        push @frames => [ caller $i ];
-                    }
-                    $e->frames(\@frames);
+                        sprintf "%s at %s line %d\n", "$e", @caller[1,2]
+                    );
+                    $e->trace(1);
+                    $e->inspect if $e->can('inspect');
                 }
 
 
-                CORE::die $_[0];
+                CORE::die $e;
             };
 
             eval { $next->() };
@@ -227,7 +227,11 @@ sub register {
 
         return unless $@;
 
-        $e = Mojo::Exception->new($@) unless $e;
+        unless ($e) {
+            $e = Mojo::Exception->new($@);
+            $e->trace(1);
+            $e->inspect if $e->can('inspect');
+        }
 
         my $hdrs = $headers;
 
@@ -254,11 +258,8 @@ sub register {
         my $e = Mojo::Exception->new(
             sprintf '%s at %s line %d', $et, @caller[1,2]
         );
-        my @frames;
-        for (my $i = 1; caller($i); $i++) {
-            push @frames => [ caller $i ];
-        }
-        $e->frames(\@frames);
+        $e->trace(2);
+        $e->inspect if $e->can('inspect');
 
         $e->{local_headers} = $hdrs;
         CORE::die $e;
