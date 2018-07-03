@@ -53,9 +53,10 @@ Stack size for crash mail. Default is C<20>.
 
 =item maildir
 
-Store messages to the maildir instead send. If You caught too many
-crashes, send can take too much CPU. So You can store messages to
-disk.
+This option saves (stores) messages in the maildir instead of
+sending them. If you catch too many crashes, then their sending
+probably uses too much of the CPU, so by using this option you
+may save your messages instead of sending them.
 
 The option is ignored if C<send> option is defined.
 
@@ -105,7 +106,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.21';
+our $VERSION = '0.23';
 use 5.008008;
 use strict;
 use warnings;
@@ -210,7 +211,7 @@ my $store_maildir = sub {
     my ($dir, $mail) = @_;
 
     my $now = time;
-    for (my $i = 0;; $i++) {
+    for (my $i = 0; $i < 1000; $i++) {
         my $fname = catfile $dir, sprintf '%d.%05d', $now, $i;
 
         my $fh;

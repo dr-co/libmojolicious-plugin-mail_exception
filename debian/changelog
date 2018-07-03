@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.23-1) nowtaxi; urgency=medium
+
+  * Update version. Prevent hangs up if someone remove maildir.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Tue, 03 Jul 2018 12:17:14 +0300
+
 libmojolicious-plugin-mailexception-perl (0.22-1) nowtaxi; urgency=medium
 
   * Add 'maildir' configoption.
