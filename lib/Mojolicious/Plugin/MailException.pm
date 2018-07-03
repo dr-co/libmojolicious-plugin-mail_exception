@@ -106,7 +106,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.23';
+our $VERSION = '0.24';
 use 5.008008;
 use strict;
 use warnings;
@@ -209,6 +209,11 @@ use Fcntl;
 
 my $store_maildir = sub {
     my ($dir, $mail) = @_;
+            
+    unless (-x $dir and -d $dir and -w $dir) {
+        warn "Directory `$dir' does not exists or accessible\n";
+        return;
+    }
 
     my $now = time;
     for (my $i = 0; $i < 1000; $i++) {
@@ -241,7 +246,7 @@ sub register {
     unless ('CODE' eq ref $cb) {
         $cb = sub { $_[0]->send };
         if (my $dir = $conf->{maildir}) {
-            croak "Directory `$dir' does not exists or accessible"
+            warn "Directory `$dir' does not exists or accessible"
                 unless -x $dir and -d $dir and -w $dir;
             $dir = rel2abs $dir;
             $cb = sub { $store_maildir->($dir, shift)  };
