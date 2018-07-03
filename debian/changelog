@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.22-1) nowtaxi; urgency=medium
+
+  * Add 'maildir' configoption.
+
+ -- Dmitry E. Oboukhov <unera@debian.org>  Tue, 03 Jul 2018 12:09:32 +0300
+
 libmojolicious-plugin-mailexception-perl (0.21-1) nowtaxi; urgency=medium
 
   * Stacksize limit.
