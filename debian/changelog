@@ -1,4 +1,4 @@
-libmojolicious-plugin-mailexception-perl (0.24-1) nowtaxi; urgency=medium
+libmojolicious-plugin-mailexception-perl (0.24-1) unstable; urgency=medium
 
   * Do not croak if maildir is not accessible.
 
