@@ -316,17 +316,22 @@ sub register {
     });
 
     $app->helper(mail_exception => sub {
-        my ($self, $et, $hdrs) = @_;
+        my ($self, $et, $hdrs, %opt) = @_;
         my @caller = caller 1;
         $et ||= 'exception';
-        my $e = Mojo::Exception->new(
-            sprintf '%s at %s line %d', $et, @caller[1,2]
-        );
-        $e->trace(2);
-        $e->inspect if $e->can('inspect');
 
-        $e->{local_headers} = $hdrs;
-        CORE::die $e;
+        my $exception;
+        unless ( $exception = $opt{exception} ) {
+            my $e = Mojo::Exception->new(
+              sprintf '%s at %s line %d', $et, @caller[1,2]
+            );
+            $e->trace(2);
+            $e->inspect if $e->can('inspect');
+            $exception = $e;
+        }
+
+        $exception->{local_headers} = $hdrs;
+        CORE::die $exception;
     });
 }
 
