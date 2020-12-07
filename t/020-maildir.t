@@ -52,7 +52,7 @@ $t->get_ok('/crash')
 
 my ($mail) = glob "$dir/*";
 
-like $mail, qr{^$dir/\d+\.\d+$}, 'file created';
+like $mail, qr{^\Q$dir\E[\\/]\d+\.\d+$}, 'file created';
 my $fh;
 ok open($fh, '<:raw', $mail), 'file opened';
 my $data = do { local $/; <$fh> };
