@@ -106,7 +106,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 use 5.008008;
 use strict;
 use warnings;
@@ -271,18 +271,17 @@ sub register {
                 ($e) = @_;
 
                 unless (ref $e and $e->isa('Mojo::Exception')) {
-                    my @caller = caller;
+                    if ($e =~ s/at\s+(.+?)\s+line\s+(\d+).*//s) {
+                        my @caller = caller;
 
-                    $e =~ s/at\s+(.+?)\s+line\s+(\d+).*//s;
+                        $e = Mojo::Exception->new(
+                            sprintf "%s at %s line %d\n", "$e", @caller[1,2]
+                        );
 
-                    $e = Mojo::Exception->new(
-                        sprintf "%s at %s line %d\n", "$e", @caller[1,2]
-                    );
-                    $e->trace(1);
-                    $e->inspect if $e->can('inspect');
+                        $e->trace(1);
+                        $e->inspect if $e->can('inspect');
+                    }
                 }
-
-
                 CORE::die $e;
             };
 

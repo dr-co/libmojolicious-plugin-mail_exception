@@ -1,3 +1,11 @@
+libmojolicious-plugin-mailexception-perl (0.25-1) unstable; urgency=medium
+
+  * If the exception does not contain line and package name, do not
+    upgrade it to a Mojo::Exception and do not append line and package
+    name, thus respecting string exceptions ending with a newline.
+
+ -- Datensegler e.U. <operations@datensegler.at> Mon, 23 Aug 2021 15:00:00 +0200
+
 libmojolicious-plugin-mailexception-perl (0.24-1) unstable; urgency=medium
 
   * Do not croak if maildir is not accessible.
