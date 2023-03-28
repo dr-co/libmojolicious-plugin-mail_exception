@@ -106,7 +106,7 @@ at your option, any later version of Perl 5 you may have available.
 
 package Mojolicious::Plugin::MailException;
 
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 use 5.008008;
 use strict;
 use warnings;
@@ -116,7 +116,6 @@ use Data::Dumper;
 use Mojo::Exception;
 use Carp;
 use MIME::Lite;
-use MIME::Words ':all';
 use File::Spec::Functions 'rel2abs', 'catfile';
 
 
@@ -125,14 +124,10 @@ my $mail_prepare = sub {
     my $subject = $conf->{subject} || 'Caught exception';
     $subject .= ' (' . $self->req->method . ': ' .
         $self->req->url->to_abs->to_string . ')';
-    utf8::encode($subject) if utf8::is_utf8 $subject;
-    $subject = encode_mimeword $subject, 'B', 'utf-8';
-
 
     my $text = '';
     $text .= "Exception\n";
     $text .= "~~~~~~~~~\n";
-
 
     $text .= $e->message;
     $text .= "\n";
@@ -172,9 +167,6 @@ my $mail_prepare = sub {
         $text .= Dumper($self->session);
     }
 
-    eval { utf8::encode($text) if utf8::is_utf8 $text };
-
-
     my $mail = MIME::Lite->new(
         From    => $from,
         To      => $to,
@@ -184,7 +176,7 @@ my $mail_prepare = sub {
 
 
     $mail->attach(
-        Type    => 'text/plain; charset=utf-8',
+        Type    => 'text/plain',
         Data    => $text
     );
 
@@ -195,7 +187,7 @@ my $mail_prepare = sub {
     $text .= $req;
 
     $mail->attach(
-        Type        => 'text/plain; charset=utf-8',
+        Type        => 'text/plain',
         Filename    => 'request.txt',
         Disposition => 'inline',
         Data        => $text

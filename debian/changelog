@@ -1,3 +1,9 @@
+libmojolicious-plugin-mailexception-perl (0.26-1) unstable; urgency=medium
+
+  * let sender handle encodings.
+
+ -- Datensegler e.U. <operations@datensegler.at> Wed, 28 Mar 2023 15:19:00 +0200
+
 libmojolicious-plugin-mailexception-perl (0.25-1) unstable; urgency=medium
 
   * If the exception does not contain line and package name, do not

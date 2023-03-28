@@ -5,7 +5,6 @@ WriteMakefile(
     VERSION_FROM      => 'lib/Mojolicious/Plugin/MailException.pm',
     PREREQ_PM         => {
         'Mojolicious'   => 0,
-        'MIME::Words'   => 0,
         'MIME::Lite'    => 0,
     },
     ($] >= 5.005 ? 
